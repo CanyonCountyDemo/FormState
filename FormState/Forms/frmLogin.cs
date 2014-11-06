@@ -27,5 +27,20 @@ namespace FormState
       // This should NOT create a new frmAbout
       StateMachine.Instance().Navigate("frmAbout");
     }
+
+    private void button3_Click(object sender, EventArgs e)
+    {
+      StateMachine.Instance().Navigate("Two", String.Empty, "Three", "Four", String.Empty, "About");
+    }
+
+    private void frmLogin_Activated(object sender, EventArgs e)
+    {
+      button1.Enabled = !StateMachine.Instance().CanGoForward;
+    }
+
+    private void cbExcept_CheckedChanged(object sender, EventArgs e)
+    {
+      StateMachine.Instance().ExceptionOnNullOrEmptyForm = cbExcept.Checked;
+    }
   }
 }

@@ -27,5 +27,12 @@ namespace FormState
       //StateMachine<frmBase>.Instance().Navigate("frmFour");
       StateMachine.Instance().Navigate("frmFour");
     }
+
+    private void frmTwo_Activated(object sender, EventArgs e)
+    {
+      bool enabled = !StateMachine.Instance().CanGoForward;
+      button1.Enabled = enabled;
+      button2.Enabled = enabled;
+    }
   }
 }

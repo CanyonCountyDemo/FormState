@@ -21,5 +21,11 @@ namespace FormState
       //StateMachine<frmBase>.Instance().Navigate("frmThree");
       StateMachine.Instance().Navigate("frmThree");
     }
+
+    private void frmFour_Activated(object sender, EventArgs e)
+    {
+      // I wanted to move this to the base form, but I don't know what buttons are for navigation
+      button1.Enabled = !StateMachine.Instance().CanGoForward;
+    }
   }
 }

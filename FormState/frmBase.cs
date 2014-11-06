@@ -38,6 +38,12 @@ namespace FormState
     {
       // This gets called every time it's activated
       //StateMachine.Instance().SetStatus(Text += " - Activated");
+      btnNext.Enabled = StateMachine.Instance().CanGoForward;
+    }
+
+    private void btnNext_Click(object sender, EventArgs e)
+    {
+      StateMachine.Instance().NextForm();
     }
   }
 }

@@ -29,6 +29,7 @@
     private void InitializeComponent()
     {
       this.btnGo = new System.Windows.Forms.Button();
+      this.btnNext = new System.Windows.Forms.Button();
       this.SuspendLayout();
       // 
       // btnGo
@@ -42,12 +43,24 @@
       this.btnGo.UseVisualStyleBackColor = true;
       this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
       // 
+      // btnNext
+      // 
+      this.btnNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+      this.btnNext.Location = new System.Drawing.Point(205, 42);
+      this.btnNext.Name = "btnNext";
+      this.btnNext.Size = new System.Drawing.Size(75, 23);
+      this.btnNext.TabIndex = 1;
+      this.btnNext.Text = "Next Form";
+      this.btnNext.UseVisualStyleBackColor = true;
+      this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+      // 
       // frmBase
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.BackColor = System.Drawing.SystemColors.Window;
       this.ClientSize = new System.Drawing.Size(292, 266);
+      this.Controls.Add(this.btnNext);
       this.Controls.Add(this.btnGo);
       this.Name = "frmBase";
       this.Text = "Base - Should never see";
@@ -60,5 +73,6 @@
     #endregion
 
     private System.Windows.Forms.Button btnGo;
+    private System.Windows.Forms.Button btnNext;
   }
 }

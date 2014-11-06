@@ -60,6 +60,7 @@
       this.Controls.Add(this.button1);
       this.Name = "frmFour";
       this.Text = "Form 4";
+      this.Activated += new System.EventHandler(this.frmFour_Activated);
       this.Controls.SetChildIndex(this.button1, 0);
       this.Controls.SetChildIndex(this.label1, 0);
       this.ResumeLayout(false);

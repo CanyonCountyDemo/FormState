@@ -72,6 +72,7 @@
       this.Controls.Add(this.button1);
       this.Name = "frmTwo";
       this.Text = "Form 2";
+      this.Activated += new System.EventHandler(this.frmTwo_Activated);
       this.Controls.SetChildIndex(this.button1, 0);
       this.Controls.SetChildIndex(this.label1, 0);
       this.Controls.SetChildIndex(this.button2, 0);

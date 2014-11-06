@@ -191,6 +191,12 @@ namespace FormState
     }
   }
 
+  public class StateMachineException : Exception 
+  {
+    public StateMachineException() : base() { }
+    public StateMachineException(string message) : base(message) { }
+  }
+
   public class StateMachine
   {
     // We're a singleton
@@ -199,13 +205,16 @@ namespace FormState
     private static frmHelp _help;
     private static Dictionary<string, Form> _forms;
     private static Stack<Form> _stack;
+    private static Stack<string> _next;
     public bool AutoCreateForms = true;
     public string FormPrefix = "frm";
+    public bool ExceptionOnNullOrEmptyForm = true;
 
     public StateMachine()
     {
       _forms = new Dictionary<string, Form>();
       _stack = new Stack<Form>();
+      _next = new Stack<string>();
     }
     
     public static StateMachine Instance(frmMain owner)
@@ -238,7 +247,11 @@ namespace FormState
       {
         instance = new StateMachine();
       }
-      if (_owner == null) throw new Exception("I need an owner, please call that instance first");
+
+      // Kill running the following code in the Visual Studio designer
+      if (System.ComponentModel.LicenseManager.UsageMode != System.ComponentModel.LicenseUsageMode.Designtime)
+        if (_owner == null) throw new StateMachineException("I need an owner, please call that instance first");
+      
       return instance;
     }
 
@@ -282,47 +295,68 @@ namespace FormState
       return frm;
     }
 
+    public void Navigate(params string[] list)
+    {
+      // Push the items onto the stack in reverse order
+      // so they pop off the stack the the order passed in
+      foreach (string form in list.Reverse())
+      {
+        _next.Push(form);
+      }
+
+      Navigate(_next.Pop());
+    }
+
     public void Navigate(string Name)
     {
-      Form frm = null;
-      if (_forms.Keys.Contains<string>(Name))
+      // You don't pass me anything, I don't do anything
+      if (!String.IsNullOrEmpty(Name))
       {
-        frm = _forms[Name];
-        // Moved this to below so we can handle AutoCreateForms
-        // This is now better/easier than Delphi and default .NET
-        //if (_owner.ActiveMdiChild != null)
-        //{
-        //  _stack.Push(_owner.ActiveMdiChild);
-        //  _owner.ActiveMdiChild.Hide();
-        //}
-        //Navigate(frm);
-      }
-      else if (_forms.Keys.Contains<string>(FormPrefix + Name))
-      {
-        frm = _forms[FormPrefix + Name];
+        Form frm = null;
+        if (_forms.Keys.Contains<string>(Name))
+        {
+          frm = _forms[Name];
+          // Moved this to below so we can handle AutoCreateForms
+          // This is now better/easier than Delphi and default .NET
+          //if (_owner.ActiveMdiChild != null)
+          //{
+          //  _stack.Push(_owner.ActiveMdiChild);
+          //  _owner.ActiveMdiChild.Hide();
+          //}
+          //Navigate(frm);
+        }
+        else if (_forms.Keys.Contains<string>(FormPrefix + Name))
+        {
+          frm = _forms[FormPrefix + Name];
+        }
+        else
+        {
+          if (AutoCreateForms)
+          {
+            frm = FindForm(Name);
+            if (frm != null)
+              AddForm(frm.Name, frm);
+          }
+        }
+
+        if (frm != null)
+        {
+          if (_owner.ActiveMdiChild != null)
+          {
+            _stack.Push(_owner.ActiveMdiChild);
+            _owner.ActiveMdiChild.Hide();
+          }
+          Navigate(frm);
+        }
+        else
+        {
+          throw new StateMachineException("State Machine: I don't know what " + Name + " is");
+        }
       }
       else
       {
-        if (AutoCreateForms)
-        {
-          frm = FindForm(Name);
-          if (frm != null)
-            AddForm(frm.Name, frm);
-        }
-      }
-      
-      if (frm != null)
-      {
-        if (_owner.ActiveMdiChild != null)
-        {
-          _stack.Push(_owner.ActiveMdiChild);
-          _owner.ActiveMdiChild.Hide();
-        }
-        Navigate(frm);
-      }
-      else
-      {
-        throw new Exception("State Machine: I don't know what " + Name + " is");
+        if (ExceptionOnNullOrEmptyForm)
+          throw new StateMachineException("State Machine: I was told to move to a null or empty form name");
       }
     }
 
@@ -339,20 +373,52 @@ namespace FormState
       frm.FormBorderStyle = FormBorderStyle.None;
       frm.Show();
       frm.BringToFront();
-      _owner.tsBack.Enabled = CanGoBack();
+      _owner.tsBack.Enabled = CanGoBack;
       if (_help != null) _help.Navigate(frm.Name.ToString());//.Text);
       SetStatus(frm.Text);
     }
 
-    private bool CanGoBack()
+    private bool CanGoBack
     {
-      return _stack.Count > 0;
+      get
+      {
+        return _stack.Count > 0;
+      }
     }
 
     private static void Back_Click(object sender, EventArgs e)
     {
-      Form frm = _stack.Pop();
-      instance.Navigate(frm);
+      if (_stack.Count > 0)
+      {
+        Form frm = _stack.Pop();
+        instance.Navigate(frm);
+      }
+    }
+
+    public bool CanGoForward
+    {
+      get
+      {
+        //_owner.Text = _next.Count.ToString();
+        return _next.Count > 0;
+      }
+    }
+
+    public void NextForm()
+    {
+      if (_next.Count > 0)
+      {
+        string form = _next.Pop();
+        if (!ExceptionOnNullOrEmptyForm)
+        {
+          while (String.IsNullOrEmpty(form))
+          {
+            form = _next.Pop();
+            if (!CanGoForward) break;
+          }
+        }
+        instance.Navigate(form);
+      }
     }
   } 
 }
