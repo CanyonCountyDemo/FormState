@@ -1,0 +1,10 @@
+<html>
+  <head>
+  <!-- no point in putting anything here. It's all replaced by an embedded CSS file -->
+  <!-- Make sure this file is an EmbeddedResource -->
+  </head>
+  <body>
+  <p>You should not see this form. It is only used to set properties that all inherited forms will use.</p>
+  <p>If it is visible it is just for demonstration purposes.</p>
+  </body>
+</html>

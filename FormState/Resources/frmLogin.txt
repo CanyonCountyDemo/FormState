@@ -1,0 +1,14 @@
+<html>
+  <head>
+  <!-- no point in putting anything here -->
+  <!-- Make sure this file is an EmbeddedResource -->
+  </head>
+  <body>
+  <p>This is a tech demo to show off a handy state machine</p>
+  <p>An application can have state, and users can navigate every which way through an application</p>
+  <p>It is the state machine's job to keep track of that so the programmer can focus on application logic and not navigation</p>
+  <p>As you click on the buttons you will be taken to a new screen (or form) and you will be able to back track your way through everything. All the programmer needs to be concerned with is which form they need to load up when the user clicks a button. State machine handles the rest.</p>
+  <p>Another advantage to using a State Machine you can easily add new screens and forms without little to no coding</p>
+  <p>In this demo I'm also using a Base Form class to make all child forms look similar and also have matching events that are inherited. Click on the frmBase button to see what all forms inherit</p>
+  </body>
+</html>

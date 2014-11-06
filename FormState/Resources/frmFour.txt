@@ -1,0 +1,9 @@
+<html>
+  <head>
+  <!-- no point in putting anything here. It's all replaced by an embedded CSS file -->
+  <!-- Make sure this file is an EmbeddedResource -->
+  </head>
+  <body>
+  <p>Not much help here</p>
+  </body>
+</html>

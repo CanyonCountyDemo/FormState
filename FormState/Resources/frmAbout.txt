@@ -1,0 +1,11 @@
+<html>
+  <head>
+  <!-- no point in putting anything here -->
+  <!-- Make sure this file is an EmbeddedResource -->
+  </head>
+  <body>
+  <p>You will notice that this form doesn't have a matching white background like the rest of the forms you've seen. It also doesn't have an about button. This is because this form decends from Form and not frmBase.</p>
+  <p>But it is still handled properly by the state machine</p>
+  <p><a href='Additional'>Test</a> - You can load up another document here (if it's in the resources). You can't easily go back though.</p>
+  </body>
+</html>

@@ -21,5 +21,11 @@ namespace FormState
       //StateMachine<frmBase>.Instance().Navigate("frmTwo");
       StateMachine.Instance().Navigate("frmTwo");
     }
+
+    private void button2_Click(object sender, EventArgs e)
+    {
+      // This should NOT create a new frmAbout
+      StateMachine.Instance().Navigate("frmAbout");
+    }
   }
 }

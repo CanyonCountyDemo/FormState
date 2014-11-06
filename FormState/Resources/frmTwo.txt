@@ -1,0 +1,14 @@
+<html>
+  <head>
+  <!-- no point in putting anything here -->
+  <!-- Make sure this file is an EmbeddedResource -->
+  </head>
+  <body>
+  <p>The first form you saw only had a big button to load up this screen (The about button is actually owned by the base form).</p>
+  <p>This form has two different buttons that take the user down two different paths. The back button (which is now enabled) will take you back the way you came.</p>
+  <p>The challenge without a state machine is keeping track of where the user goes. With a state machine the programmer just has to do this.</p>
+  <p><pre>StateMachine.Instance().Navigate("frmThree");</pre></p>
+  <p>All the above code is doing is calling a static method of a singleton class and telling it which screen should be next.</p>
+  <p>That's ALL the code you need to add - this help text is handled by the StateMachine as well!</p>
+  </body>
+</html>

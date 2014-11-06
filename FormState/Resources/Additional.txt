@@ -1,0 +1,11 @@
+<html>
+  <head>
+  <!-- no point in putting anything here -->
+  <!-- Make sure this file is an EmbeddedResource -->
+  </head>
+  <body>
+  <p>See you went to an additional page, woot - I don't know why you'd want to do this, but I thought I should or could support it.</p>
+  <p>Since this window can scroll forever I'd suggest not even using additional pages. Copy and paste works!</p>
+  <p><a href='frmAbout'>Go Back</a> - Can we go back?</p>
+  </body>
+</html>

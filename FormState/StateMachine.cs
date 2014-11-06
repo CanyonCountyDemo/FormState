@@ -199,7 +199,8 @@ namespace FormState
     private static frmHelp _help;
     private static Dictionary<string, Form> _forms;
     private static Stack<Form> _stack;
-
+    public bool AutoCreateForms = true;
+    public string FormPrefix = "frm";
 
     public StateMachine()
     {
@@ -213,6 +214,7 @@ namespace FormState
       {
         instance = new StateMachine();
         _owner = owner;
+        _owner.IsMdiContainer = true; // Force this if they didn't
         _owner.tsBack.Click += new System.EventHandler(Back_Click);
       }
       return instance;
@@ -264,11 +266,53 @@ namespace FormState
       }
     }
 
+    private Form FindForm(string Name)
+    {
+      Assembly assembly = Assembly.GetExecutingAssembly();
+      Type[] types = assembly.GetTypes();
+      Form frm = null;
+      foreach (Type type in types)
+      {
+        // If the type name is the name we passed in
+        // OR the name we passed in pluss the FormPrefix
+        // then that's the form we want
+        if ((type.Name == Name) | (type.Name == FormPrefix + Name))
+          frm = (Form)Activator.CreateInstance(type);
+      }
+      return frm;
+    }
+
     public void Navigate(string Name)
     {
+      Form frm = null;
       if (_forms.Keys.Contains<string>(Name))
       {
-        Form frm = _forms[Name];
+        frm = _forms[Name];
+        // Moved this to below so we can handle AutoCreateForms
+        // This is now better/easier than Delphi and default .NET
+        //if (_owner.ActiveMdiChild != null)
+        //{
+        //  _stack.Push(_owner.ActiveMdiChild);
+        //  _owner.ActiveMdiChild.Hide();
+        //}
+        //Navigate(frm);
+      }
+      else if (_forms.Keys.Contains<string>(FormPrefix + Name))
+      {
+        frm = _forms[FormPrefix + Name];
+      }
+      else
+      {
+        if (AutoCreateForms)
+        {
+          frm = FindForm(Name);
+          if (frm != null)
+            AddForm(frm.Name, frm);
+        }
+      }
+      
+      if (frm != null)
+      {
         if (_owner.ActiveMdiChild != null)
         {
           _stack.Push(_owner.ActiveMdiChild);
@@ -295,8 +339,8 @@ namespace FormState
       frm.FormBorderStyle = FormBorderStyle.None;
       frm.Show();
       frm.BringToFront();
-      _owner.tsBack.Visible = CanGoBack();
-      if (_help != null) _help.Navigate(frm.Text);
+      _owner.tsBack.Enabled = CanGoBack();
+      if (_help != null) _help.Navigate(frm.Name.ToString());//.Text);
       SetStatus(frm.Text);
     }
 
